@@ -15,17 +15,28 @@ import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
 import { setUser } from "@/redux/features/authSlice";
 import CustomLoader from "@/components/CustomLoader/CustomLoader";
+import { requestFcmToken, initializeMessaging } from "@/lib/firebaseClient";
+import { useEffect } from "react";
 
 export default function LoginForm() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [signin, { isLoading }] = useSignInMutation();
 
+  // Initialize Firebase messaging on component mount
+  useEffect(() => {
+    initializeMessaging().then(() => {
+      console.log("Firebase messaging initialized");
+    });
+  }, []);
+
   const onLoginSubmit = async (data) => {
+    const fcmToken = await requestFcmToken();
+    // console.log("FCM Token================:", fcmToken);
     try {
       const payload = {
         ...data,
-        fcmToken: "MobileApp", // Assuming this is a placeholder for the actual FCM token
+        fcmToken: fcmToken || null,
       };
       const res = await signin(payload).unwrap();
 
@@ -36,7 +47,6 @@ export default function LoginForm() {
           toast.error("You are not authorized to access this site");
           return;
         }
-        // On successful login and role check
         toast.success("Login successful");
         dispatch(
           setUser({

@@ -1,23 +1,31 @@
-import { baseApi } from './baseApi';
+import { baseApi } from "./baseApi";
 
 const UserApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllusers: builder.query({
       query: ({ limit, page, searchText }) => ({
         url: `/users?limit=${limit}&page=${page}&searchTerm=${searchText}`,
-        method: 'GET',
+        method: "GET",
       }),
-      providesTags: ['user'],
+      providesTags: ["user,notification"],
     }),
     blockUnblockUser: builder.mutation({
-      query: (payload) => ({ url: `/users/change-status`, method: 'PATCH', body: payload }),
-      invalidatesTags: ['user'],
+      query: (payload) => ({
+        url: `/users/change-status`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["user,notification"],
     }),
     deleteUser: builder.mutation({
-      query: (id) => ({ url: `/users/${id}`, method: 'DELETE' }),
-      invalidatesTags: ['user'],
+      query: (id) => ({ url: `/users/${id}`, method: "DELETE" }),
+      invalidatesTags: ["user"],
     }),
   }),
 });
 
-export const { useGetAllusersQuery, useBlockUnblockUserMutation, useDeleteUserMutation } = UserApi;
+export const {
+  useGetAllusersQuery,
+  useBlockUnblockUserMutation,
+  useDeleteUserMutation,
+} = UserApi;

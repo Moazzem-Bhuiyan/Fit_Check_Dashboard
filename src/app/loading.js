@@ -1,5 +1,5 @@
+import CustomLoader from "@/components/CustomLoader/CustomLoader";
 import { ConfigProvider } from "antd";
-import { Spin } from "antd";
 
 export default function loading() {
   return (
@@ -10,8 +10,8 @@ export default function loading() {
         },
       }}
     >
-      <div className="h-[75vh] flex-center">
-        <Spin size="large" />
+      <div className="flex-center h-[75vh]">
+        <CustomLoader className="h-12 w-12 text-primary-blue" />
       </div>
     </ConfigProvider>
   );

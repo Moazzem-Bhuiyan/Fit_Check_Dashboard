@@ -1,5 +1,4 @@
 "use client";
-import RecentUserTable from "./RecentTransactions";
 import CustomCountUp from "@/components/CustomCountUp/CustomCountUp";
 import EarningSummary from "./Earnings";
 import UserStatistics from "./UserChart";
@@ -8,7 +7,6 @@ import icon2 from "@/assets/images/staticsicon2.png";
 import Image from "next/image";
 import { useState } from "react";
 import { useGetDashboardDataQuery } from "@/redux/api/dashboardApi";
-import CustomLoader from "@/components/CustomLoader/CustomLoader";
 import RecentTransactions from "./RecentTransactions";
 
 export default function DashboardContainer() {
@@ -21,8 +19,31 @@ export default function DashboardContainer() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <CustomLoader className="h-10 w-10" />
+      <div className="h-[calc(100vh-124px)]">
+        <div className="h-[calc(100vh-124px)] p-6">
+          <div className="max-w-9xl mx-auto">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="animate-pulse rounded-lg bg-white shadow-md"
+                >
+                  <div className="p-0">
+                    <div className="h-48 rounded-t-lg bg-gray-200"></div>
+                  </div>
+                  <div className="p-4">
+                    <div className="mb-2 h-4 rounded bg-gray-200"></div>
+                    <div className="mb-4 h-3 rounded bg-gray-200"></div>
+                    <div className="flex gap-2">
+                      <div className="h-9 flex-1 rounded bg-gray-200"></div>
+                      <div className="h-9 flex-1 rounded bg-gray-200"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -31,13 +52,14 @@ export default function DashboardContainer() {
     {
       key: "users",
       title: "Total Users",
-      icon: icon1,
       count: data?.data?.totalUserCount || 0,
+      icon: icon2,
     },
     {
       key: "earning",
       title: "Total Earning",
-      icon: icon2,
+
+      icon: icon1,
       count: data?.data?.totalRevenue || 0,
     },
   ];
@@ -73,8 +95,8 @@ export default function DashboardContainer() {
               <div
                 className={`flex aspect-square !w-20 items-center justify-center rounded-full ${
                   stat.key === "earning"
-                    ? "bg-gradient-to-tr from-[#22C55E] to-[#1B70A6]"
-                    : "bg-[#F2F2F2]"
+                    ? "bg-[#F2F2F2]"
+                    : "bg-gradient-to-tr from-[#22C55E] to-[#1B70A6]"
                 }`}
               >
                 <Image src={stat.icon} alt={stat.title} className="h-10 w-10" />

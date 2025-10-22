@@ -1,12 +1,13 @@
 "use client";
 
-import { Button } from "antd";
+import { Badge, Button } from "antd";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Layout } from "antd";
 import { AlignJustify } from "lucide-react";
 import { useGetMyProfileQuery } from "@/redux/api/authApi";
+import { useGetMyNotificationQuery } from "@/redux/api/notificationApi";
 const { Header } = Layout;
 
 export default function HeaderContainer({ collapsed, setCollapsed }) {
@@ -14,6 +15,10 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
   const navbarTitle = pathname.split("/admin")[1];
   const { data, isLoading } = useGetMyProfileQuery();
   const user = data?.data;
+  // notification-------------------
+  const { data: notificationData } = useGetMyNotificationQuery({
+    read: false,
+  });
 
   return (
     <Header
@@ -49,9 +54,12 @@ export default function HeaderContainer({ collapsed, setCollapsed }) {
 
         <Link href="/admin/notification" className="relative !leading-none">
           {/* Notification dot indicator */}
-          <div className="absolute -right-1 -top-1.5 size-3 rounded-full bg-[#000000]" />
-
-          <Bell fill="#1C1B1F" stroke="#1C1B1F" size={22} />
+          <div />
+          <Badge
+            count={notificationData?.meta?.total || 0}
+            overflowCount={10}
+          ></Badge>
+          <Bell fill="#1C1B1F" stroke="#1C1B1F" size={18} />
         </Link>
         {/* User */}
         <Link

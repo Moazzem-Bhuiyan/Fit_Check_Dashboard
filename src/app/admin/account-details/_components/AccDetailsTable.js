@@ -1,9 +1,9 @@
 "use client";
-
+import noUser from "@/assets/images/nouser.png";
 import { Input, Table } from "antd";
 import { Tooltip } from "antd";
 import { ConfigProvider } from "antd";
-import { ChevronLeft, ChevronRight, Search, Trash } from "lucide-react";
+import { Search, Trash } from "lucide-react";
 import { Eye } from "lucide-react";
 import { UserX } from "lucide-react";
 import { useState } from "react";
@@ -112,7 +112,9 @@ export default function AccDetailsTable() {
         };
 
         // Get the first letter of the name (uppercase)
-        const firstLetter = value ? value.charAt(0).toUpperCase() : "";
+        const firstLetter = record?.email
+          ? record?.email.charAt(0).toUpperCase()
+          : "";
 
         // Determine if the image is valid
         const hasValidImage = isValidUrl(record?.userImg);
@@ -121,11 +123,11 @@ export default function AccDetailsTable() {
           <div className="flex-center-start gap-x-2">
             {hasValidImage ? (
               <Image
-                src={record?.userImg}
-                alt="User avatar"
+                src={record?.userImg || "/nouser.png"}
+                alt="/nouser.png"
                 width={40}
                 height={40}
-                className="aspect-square h-auto w-10 rounded-full"
+                className="aspect-square h-10 w-10 rounded-full border object-cover"
               />
             ) : (
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-[#cbf9f2] to-foundation-accent-400 text-lg font-medium text-white">
